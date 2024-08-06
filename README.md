@@ -1,3 +1,3 @@
 # DPDK Version
-The current DPDK version is 21.11.
+The current DPDK version is 23.11.
 
