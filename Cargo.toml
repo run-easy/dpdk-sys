@@ -1,0 +1,18 @@
+[package]
+name = "dpdk"
+version = "0.2.0"
+edition = "2021"
+
+[build-dependencies]
+bindgen = "0.69.4"
+cc = "1"
+
+[features]
+default = ["eal"]
+eal = []
+power = ["eal"]
+
+[[bin]]
+name = "test"
+path = "test/main.rs"
+

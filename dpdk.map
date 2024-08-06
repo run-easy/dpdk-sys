@@ -1,0 +1,98 @@
+eal {
+  function:
+  
+  rte_eal_init;
+  rte_eal_cleanup;
+};
+
+lcore {
+  function:
+  
+  rte_thread_register;
+  rte_thread_unregister;
+  rte_get_main_lcore;
+  rte_lcore_count;
+  rte_lcore_id_;
+};
+
+mbuf {
+  function:
+
+  rte_pktmbuf_pool_create;
+  rte_pktmbuf_free_bulk;
+  rte_pktmbuf_alloc_;
+  rte_pktmbuf_alloc_bulk_;
+  rte_pktmbuf_free_;
+
+  type:
+
+  rte_mbuf;
+};
+
+mempool {
+  function:
+
+  rte_mempool_free;
+  rte_mempool_avail_count;
+  rte_mempool_full_;
+
+  type:
+
+  rte_mempool;
+};
+
+ethdev {
+  function:
+
+  rte_eth_dev_info_get;
+  rte_eth_dev_count_avail;
+  rte_eth_macaddr_get;
+  rte_eth_stats_get;
+  rte_eth_dev_socket_id;
+  rte_eth_dev_configure;
+  rte_eth_dev_start;
+  rte_eth_dev_stop;
+  rte_eth_dev_close;
+  rte_eth_rx_queue_setup;
+  rte_eth_tx_queue_setup;
+  rte_eth_promiscuous_enable;
+  rte_eth_promiscuous_disable;
+  rte_eth_tx_burst_;
+  rte_eth_rx_burst_;
+
+  type:
+
+  rte_eth_conf;
+  rte_eth_dev_info;
+  rte_eth_stats;
+};
+
+build_config {
+  var:
+
+  RTE.*;
+};
+
+config {
+  var:
+
+  RTE.*;
+};
+
+power {
+  function:
+
+  rte_power.*;
+
+  type:
+
+  power_management_env;
+  rte_power_core_capabilities;
+};
+
+errno {
+  function:
+
+  rte_strerror;
+  rte_errno_; 
+};
