@@ -1,6 +1,6 @@
 use std::ffi::CString;
 
-use dpdk::{rte_eal_init, rte_lcore_id_};
+use dpdk_sys::{rte_eal_init, rte_lcore_id_};
 
 fn main() {
     let argc = 1;

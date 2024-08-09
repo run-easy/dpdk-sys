@@ -152,7 +152,7 @@ fn configure() {
         .expect("Please install meson");
 
     if !result.status.success() {
-        let err = String::from_utf8(result.stderr).unwrap();
+        let err = String::from_utf8(result.stdout).unwrap();
         panic!("Failed to configure dpdk, stderr: {}", err);
     }
 
@@ -163,6 +163,7 @@ fn download() {
     std::fs::remove_file("deps/download.ok").unwrap_or_default();
 
     let dpdk_file = format!("dpdk-{}.tar.xz", DPDK_VERSION);
+    #[allow(unused_assignments)]
     let mut succ = false;
 
     if !succ {
@@ -204,18 +205,17 @@ fn download() {
         }
     }
 
+    // succ = true;
+
     if succ {
-        if let Ok(output) = Command::new("md5sum").arg(dpdk_file.as_str()).output() {
-            let md5sum = String::from_utf8(output.stdout)
-                .unwrap_or_default()
-                .trim()
-                .to_string();
-            if md5sum.as_str() != MD5SUM {
-                panic!("md5 verification failed. `{}` != `{}`", md5sum, MD5SUM);
-            }
+        let file = std::fs::File::open(format!("deps/{}", dpdk_file)).expect("Failed to open file");
+        let md5sum = chksum_md5::chksum(file).expect("Failed to calculate md5sum");
+        if md5sum.to_hex_lowercase() != MD5SUM.to_lowercase() {
+            panic!("MD5 checksum failed");
         }
 
         let result = Command::new("tar")
+            .current_dir("deps")
             .args(["-xf", dpdk_file.as_str()])
             .status()
             .expect("Please install tar");
@@ -230,7 +230,7 @@ fn download() {
                 DPDK_VERSION
                     .strip_suffix(".0")
                     .map(|s| s.to_string())
-                    .unwrap_or(format!("deps/dpdk-{}", DPDK_VERSION))
+                    .unwrap_or(format!("{}", DPDK_VERSION))
             ));
             if dir.exists() && dir.is_dir() {
                 dir
@@ -240,7 +240,7 @@ fn download() {
                     DPDK_VERSION
                         .strip_suffix(".0")
                         .map(|s| s.to_string())
-                        .unwrap_or(format!("deps/dpdk-stable-{}", DPDK_VERSION))
+                        .unwrap_or(format!("{}", DPDK_VERSION))
                 ))
             }
         };
@@ -271,6 +271,8 @@ fn download() {
             )
             .as_str(),
         );
+
+        std::fs::File::create("deps/download.ok").expect("Failed to create deps/download.ok");
     }
 }
 
